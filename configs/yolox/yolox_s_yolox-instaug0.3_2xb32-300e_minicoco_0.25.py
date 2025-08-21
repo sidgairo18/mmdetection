@@ -1,3 +1,6 @@
+import os                                                                                     
+# Resolve project root:                                                                       
+project_root = os.getenv("MMDET_PATH")                                                        
 _base_ = [
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py',
     './yolox_tta.py'
@@ -70,8 +73,7 @@ model = dict(
     test_cfg=dict(score_thr=0.01, nms=dict(type='nms', iou_threshold=0.65)))
 
 # dataset settings
-#data_root = 'data/coco/'
-data_root = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco/'
+data_root = project_root+'/data/coco/'
 dataset_type = 'CocoDataset'
 
 # Example to use different file client
@@ -88,7 +90,7 @@ dataset_type = 'CocoDataset'
 #         'data/': 's3://openmmlab/datasets/detection/'
 #     }))
 backend_args = None
-inst_augment_base_dir = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco_augmented/'
+inst_augment_base_dir = project_root+'/data/coco_augmented/'
 inst_augment_prob = 0.3
 
 train_pipeline = [

@@ -1,3 +1,6 @@
+import os                                                                                     
+# Resolve project root:                                                                       
+project_root = os.getenv("MMDET_PATH")                                                        
 _base_ = 'mmdet::common/ssj_scp_270k_coco-instance.py'
 
 custom_imports = dict(
@@ -281,10 +284,10 @@ model = dict(
 
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco/'
+data_root = project_root+'/data/coco/'
 backend_args = None
 # updating for instance aug
-inst_augment_base_dir = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco_augmented/'
+inst_augment_base_dir = project_root+'/data/coco_augmented/'
 inst_augment_prob = 0.3
 
 # Replace LSJ + CopyPaste with YOLOX-style data augmentation pipeline

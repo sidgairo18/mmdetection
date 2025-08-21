@@ -1,8 +1,10 @@
+import os                                                                                     
+# Resolve project root:                                                                       
+project_root = os.getenv("MMDET_PATH")                                                        
 _base_ = '../_base_/default_runtime.py'
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco/'
-#data_root = 'data/coco/'
+data_root = project_root+'/data/lvis/'
 
 image_size = (1024, 1024)
 

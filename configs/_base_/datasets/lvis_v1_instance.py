@@ -1,8 +1,11 @@
 # dataset settings
+import os
+# Resolve project root:
+project_root = os.getenv("MMDET_PATH")
+
 _base_ = 'lvis_v0.5_instance.py'
 dataset_type = 'LVISV1Dataset'
-#data_root = 'data/lvis_v1/'
-data_root = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco/'
+data_root = project_root+'/data/lvis/'
 
 train_dataloader = dict(
     dataset=dict(

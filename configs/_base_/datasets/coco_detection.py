@@ -1,7 +1,9 @@
+import os                                                                                     
+# Resolve project root:                                                                       
+project_root = os.getenv("MMDET_PATH")                                                        
 # dataset settings
 dataset_type = 'CocoDataset'
-#data_root = 'data/coco/'
-data_root = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco/'
+data_root = project_root+'/data/coco/'
 
 # Example to use different file client
 # Method 1: simply set the data root and let the file I/O module

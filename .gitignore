@@ -130,5 +130,6 @@ slurm_scripts/
 my_playground/
 job_submit.sh
 test_runner.sh
+set_dataset_paths.sh
 *.pth
 
