@@ -11,3 +11,8 @@ model = dict(
             score_thr=0.0001,
             # LVIS allows up to 300
             max_per_img=300)))
+
+train_dataloader = dict(
+        batch_size=4,
+        num_workers=2,
+        )

@@ -121,3 +121,14 @@ work_dirs/
 *.pth
 *.py~
 *.sh~
+
+# custom-sid extra stuff
+data/
+wandb/
+tools/sbatch_train_multinode_mpi-slurm.sh
+slurm_scripts/
+my_playground/
+job_submit.sh
+test_runner.sh
+*.pth
+

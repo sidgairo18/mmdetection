@@ -2,7 +2,11 @@
 from .co_atss_head import CoATSSHead
 from .co_dino_head import CoDINOHead
 from .co_roi_head import CoStandardRoIHead
-from .codetr import CoDETR
+#from .codetr import CoDETR
+try:
+    from .codetr import CoDETR
+except KeyError:
+    pass  # Avoid double registration
 from .transformer import (CoDinoTransformer, DetrTransformerDecoderLayer,
                           DetrTransformerEncoder, DinoTransformerDecoder)
 

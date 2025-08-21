@@ -12,7 +12,7 @@ from .instaboost import InstaBoost
 from .loading import (FilterAnnotations, InferencerLoader, LoadAnnotations,
                       LoadEmptyAnnotations, LoadImageFromNDArray,
                       LoadMultiChannelImageFromFiles, LoadPanopticAnnotations,
-                      LoadProposals, LoadTrackAnnotations)
+                      LoadProposals, LoadTrackAnnotations, LoadImageFromFileInstAug)
 from .text_transformers import LoadTextAnnotations, RandomSamplingNegPos
 from .transformers_glip import GTBoxSubOne_GLIP, RandomFlip_GLIP
 from .transforms import (Albu, CachedMixUp, CachedMosaic, CopyPaste, CutOut,

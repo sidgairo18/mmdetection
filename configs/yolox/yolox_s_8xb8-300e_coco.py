@@ -70,7 +70,8 @@ model = dict(
     test_cfg=dict(score_thr=0.01, nms=dict(type='nms', iou_threshold=0.65)))
 
 # dataset settings
-data_root = 'data/coco/'
+#data_root = 'data/coco/'
+data_root = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco/'
 dataset_type = 'CocoDataset'
 
 # Example to use different file client

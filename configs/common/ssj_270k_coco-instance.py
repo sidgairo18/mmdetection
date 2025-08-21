@@ -1,7 +1,8 @@
 _base_ = '../_base_/default_runtime.py'
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = 'data/coco/'
+data_root = '/BS/generative_modelling_for_image_understanding/nobackup/data/DETECTRON2_DATASETS/coco/'
+#data_root = 'data/coco/'
 
 image_size = (1024, 1024)
 
