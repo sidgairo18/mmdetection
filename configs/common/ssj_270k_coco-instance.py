@@ -4,7 +4,7 @@ project_root = os.getenv("MMDET_PATH")
 _base_ = '../_base_/default_runtime.py'
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = project_root+'/data/lvis/'
+data_root = project_root+'/data/coco/'
 
 image_size = (1024, 1024)
 
