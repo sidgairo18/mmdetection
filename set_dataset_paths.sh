@@ -34,13 +34,13 @@ export CLUSTER_ID
 # --- per-cluster dataset roots (from cluster.env) ---
 case "$CLUSTER_ID" in
   raven)
-    export DETECTRON2_DATASETS="${DETECTRON2_DATASETS:-/nfs/scistore19/locatgrp/sgairola/data/DETECTRON2_DATASETS}"
+    export DETECTRON2_DATASETS="${DETECTRON2_DATASETS:-/ptmp/sgairola/work/data/DETECTRON2_DATASETS}"
     export COCO_ROOT="$DETECTRON2_DATASETS/coco"
     export LVIS_ROOT="$DETECTRON2_DATASETS/lvis"
     export CURR_MAMBA_ENV="openmmlab_mmdet_xx"
     ;;
   ista)
-    export DETECTRON2_DATASETS="${DETECTRON2_DATASETS:-/}"
+    export DETECTRON2_DATASETS="${DETECTRON2_DATASETS:-/nfs/scistore19/locatgrp/sgairola/data/DETECTRON2_DATASETS}"
     export COCO_ROOT="$DETECTRON2_DATASETS/coco"
     export LVIS_ROOT="$DETECTRON2_DATASETS/lvis"
     export CURR_MAMBA_ENV="mmdet308_c121"
