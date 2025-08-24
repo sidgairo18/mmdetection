@@ -11,11 +11,13 @@ from .visualization_hook import (DetVisualizationHook,
                                  GroundingVisualizationHook,
                                  TrackVisualizationHook)
 from .yolox_mode_switch_hook import YOLOXModeSwitchHook
+from .wandb_hooks import WandbArtifactHook  # <-- add this line
 
 __all__ = [
     'YOLOXModeSwitchHook', 'SyncNormHook', 'CheckInvalidLossHook',
     'SetEpochInfoHook', 'MemoryProfilerHook', 'DetVisualizationHook',
     'NumClassCheckHook', 'MeanTeacherHook', 'trigger_visualization_hook',
     'PipelineSwitchHook', 'TrackVisualizationHook',
-    'GroundingVisualizationHook'
+    'GroundingVisualizationHook',
+    'WandbArtifactHook'
 ]
