@@ -35,14 +35,14 @@ export CLUSTER_ID
 case "$CLUSTER_ID" in
   raven)
     export DETECTRON2_DATASETS="${DETECTRON2_DATASETS:-/}"
-    export COCO_ROOT="/raven/datasets/coco"
-    export LVIS_ROOT="/raven/datasets/lvis"
+    export COCO_ROOT="$DETECTRON2_DATASETS/coco"
+    export LVIS_ROOT="$DETECTRON2_DATASETS/lvis"
     export CURR_MAMBA_ENV="openmmlab_mmdet_xx"
     ;;
   ista)
     export DETECTRON2_DATASETS="${DETECTRON2_DATASETS:-/}"
-    export COCO_ROOT="/ista/datasets/coco"
-    export LVIS_ROOT="/ista/datasets/lvis"
+    export COCO_ROOT="$DETECTRON2_DATASETS/coco"
+    export LVIS_ROOT="$DETECTRON2_DATASETS/lvis"
     export CURR_MAMBA_ENV="mmdet308_c121"
     ;;
   *)
