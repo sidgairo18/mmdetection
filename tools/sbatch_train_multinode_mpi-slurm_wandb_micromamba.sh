@@ -57,7 +57,7 @@ echo "python args: ${PY_ARGS}"
 # Export helper useful env variables
 source set_dataset_paths.sh
 
-source ~/sgairola/.bashrc
+source ~/.bashrc
 eval "\$(conda shell.bash hook)"
 micromamba activate ${CURR_MAMBA_ENV}
 

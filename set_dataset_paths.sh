@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Unified cluster env + dataset links
 # Usage: source set_dataset_paths.sh
+#
+# unset stale paths
+unset DETECTRON2_DATASETS MMDET_PATH CLUSTER_ID COCO_ROOT LVIS_ROOT CURR_MAMBA_ENV
 
 # --- repo root detection (from cluster.env) ---
 if [ -z "${MMDET_PATH:-}" ]; then
@@ -15,21 +18,39 @@ mkdir -p "$MMDET_PATH/data"
 
 # --- cluster detection (override with: export CLUSTER_ID=...) ---
 if [ -z "${CLUSTER_ID:-}" ]; then
+  # 1) Fast, reliable filesystem sentinels
   if [ -d /raven/datasets ]; then
     CLUSTER_ID="raven"
   elif [ -d /ista/datasets ]; then
     CLUSTER_ID="ista"
   else
-    hn="$(hostname -f 2>/dev/null || hostname)"
+    # 2) Hostname-based fallback (use short hostname)
+    hn="$(hostname -s 2>/dev/null || hostname)"
     case "$hn" in
-      raven*|*raven*)                 CLUSTER_ID="raven" ;;
-      slurm-submit*|*slurm-submit*)   CLUSTER_ID="local" ;;
-      gpu[0-9]*)                      CLUSTER_ID="ista"  ;;  # fallback for ISTA naming
-      *)                              CLUSTER_ID="local" ;;
+      # Raven: hosts start with ravg... or ravc... followed by digits
+      ravg[0-9]*|ravc[0-9]*)
+        CLUSTER_ID="raven"
+        ;;
+
+      # Local cluster: gpu16/gpu17/gpu20/gpu22/gpu24 with a suffix like "-l40-15"
+      gpu16-*|gpu17-*|gpu20-*|gpu22-*|gpu24-*|slurm-submit*|*slurm-submit*)
+        CLUSTER_ID="local"
+        ;;
+
+      # ISTA: plain gpu + 3 digits (e.g., gpu118, gpu241, gpu283, etc.)
+      gpu[0-9][0-9][0-9]|gpu[0-9][0-9][0-9]-*)
+        CLUSTER_ID="ista"
+        ;;
+
+      # Catch-all: default to local
+      *)
+        CLUSTER_ID="local"
+        ;;
     esac
   fi
 fi
 export CLUSTER_ID
+
 
 # --- per-cluster dataset roots (from cluster.env) ---
 case "$CLUSTER_ID" in

@@ -1,4 +1,4 @@
-_base_ = './co_dino_5scale_r50_lsj_8xb2_1x_coco.py'
+_base_ = './co_dino_5scale_r50_lsj_8xb2_1x_lvis-v1.py'
 
 model = dict(
     use_lsj=False, data_preprocessor=dict(pad_mask=False, batch_augments=None))
@@ -50,8 +50,8 @@ train_dataloader = dict(
         _delete_=True,
         type=_base_.dataset_type,
         data_root=_base_.data_root,
-        ann_file='annotations/instances_train2017.json',
-        data_prefix=dict(img='train2017/'),
+        ann_file=_base_.train_ann_file,
+        data_prefix=dict(img=''),
         filter_cfg=dict(filter_empty_gt=False, min_size=32),
         pipeline=train_pipeline,
         backend_args=_base_.backend_args))

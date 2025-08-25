@@ -1,4 +1,5 @@
-_base_ = 'mmdet::common/ssj_scp_270k_coco-instance.py'
+_base_ = ['mmdet::_base_/datasets/lvis_v1_instance.py',
+          'mmdet::_base_/default_runtime.py']
 
 custom_imports = dict(
     imports=['projects.CO-DETR.codetr'], allow_failed_imports=False)
@@ -6,7 +7,8 @@ custom_imports = dict(
 # model settings
 num_dec_layer = 6
 loss_lambda = 2.0
-num_classes = 80
+# --- IMPORTANT: LVIS has 1203 categories ---
+num_classes = 1203 # LVIS has 1203 categories
 
 image_size = (1024, 1024)
 batch_augments = [
@@ -46,18 +48,25 @@ model = dict(
         act_cfg=None,
         norm_cfg=dict(type='GN', num_groups=32),
         num_outs=5),
+
+    # -------------------
+    # Query Head (CoDINO)
+    # -------------------
     query_head=dict(
         type='CoDINOHead',
         num_query=900,
         num_classes=num_classes,
         in_channels=2048,
+        # LVIS ref-style flags:
         as_two_stage=True,
+        sync_cls_avg_factor=True,  # [LVIS-ADD]
         dn_cfg=dict(
             label_noise_scale=0.5,
             box_noise_scale=1.0,
             group_cfg=dict(dynamic=True, num_groups=None, num_dn_queries=100)),
         transformer=dict(
             type='CoDinoTransformer',
+            with_pos_coord=True,   # [LVIS-ADD] inject (x,y,w,h) pos hints
             with_coord_feat=False,
             num_co_heads=2,  # ATSS Aux Head + Faster RCNN Aux Head
             num_feature_levels=5,
@@ -112,6 +121,10 @@ model = dict(
             loss_weight=1.0),
         loss_bbox=dict(type='L1Loss', loss_weight=5.0),
         loss_iou=dict(type='GIoULoss', loss_weight=2.0)),
+
+    # ---------------
+    # RPN Head
+    # ---------------
     rpn_head=dict(
         type='RPNHead',
         in_channels=256,
@@ -132,6 +145,10 @@ model = dict(
             loss_weight=1.0 * num_dec_layer * loss_lambda),
         loss_bbox=dict(
             type='L1Loss', loss_weight=1.0 * num_dec_layer * loss_lambda)),
+
+    # ---------------
+    # RoI Head
+    # ---------------
     roi_head=[
         dict(
             type='CoStandardRoIHead',
@@ -162,6 +179,10 @@ model = dict(
                     type='GIoULoss',
                     loss_weight=10.0 * num_dec_layer * loss_lambda)))
     ],
+
+    # ---------------
+    # ATSS Aux Head
+    # ---------------
     bbox_head=[
         dict(
             type='CoATSSHead',
@@ -193,6 +214,7 @@ model = dict(
                 use_sigmoid=True,
                 loss_weight=1.0 * num_dec_layer * loss_lambda)),
     ],
+
     # model training and testing settings
     train_cfg=[
         dict(
@@ -300,14 +322,26 @@ train_pipeline = [
     dict(type='PackDetInputs')
 ]
 
-train_dataloader = dict(
-    batch_size=4,
-    num_workers=2,
+dataset_type='LVISV1Dataset'
+data_root='data/lvis/'
+train_ann_file='annotations/lvis_v1_train.json'
+val_ann_file='annotations/lvis_v1_val.json'
+backend_args = None
+
+train_dataloader = dict(                                                                      
     sampler=dict(type='DefaultSampler', shuffle=True),
-    dataset=dict(
-        pipeline=train_pipeline,
-        dataset=dict(
-            filter_cfg=dict(filter_empty_gt=False), pipeline=load_pipeline)))
+    dataset=dict(                                                                             
+        _delete_=True,                                                                        
+        type='MultiImageMixDataset',                                                          
+        dataset=dict(                                                                         
+            type=dataset_type,                                                                
+            data_root=data_root,                                                              
+            ann_file=train_ann_file,
+            data_prefix=dict(img=''),                                               
+            filter_cfg=dict(filter_empty_gt=False),                               
+            pipeline=load_pipeline,                                                           
+            backend_args=backend_args),                                                       
+        pipeline=train_pipeline))
 
 # follow ViTDet
 test_pipeline = [
@@ -325,7 +359,6 @@ val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
 optim_wrapper = dict(
-    _delete_=True,
     type='OptimWrapper',
     optimizer=dict(type='AdamW', lr=2e-4, weight_decay=0.0001),
     clip_grad=dict(max_norm=0.1, norm_type=2),
@@ -336,10 +369,11 @@ test_evaluator = val_evaluator
 
 max_epochs = 12
 train_cfg = dict(
-    _delete_=True,
     type='EpochBasedTrainLoop',
     max_epochs=max_epochs,
     val_interval=1)
+val_cfg = dict(type='ValLoop')
+test_cfg = dict(type='TestLoop')
 
 param_scheduler = [
     dict(
